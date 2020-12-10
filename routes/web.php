@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TodoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
+Route::middleware(['auth:sanctum'])->group(function() {
+    Route::get('/home', [TodoController::class, 'home'])->name('home');
+    Route::get('todos/{id}', [TodoController::class, 'show'])->name('todo.show');
+    Route::post('todos', [TodoController::class, 'store'])->name('todo.store');
+    Route::put('todos/{id}', [TodoController::class, 'update'])->name('todo.update');
+    Route::delete('todos/{id}', [TodoController::class, 'destroy'])->name('todo.destroy');
+    Route::get('/burndown', [TodoController::class, 'burndown'])->name('burndown');
+});
+
+
